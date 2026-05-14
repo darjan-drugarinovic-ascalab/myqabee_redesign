@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en" class="light">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>myQABee - Test Cases</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+    <style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+
+      /* === Clickable hotspot reveal (Figma-style misclick flash) === */
+      [data-hotspot] {
+        outline: 2px solid rgba(239, 68, 68, 0);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+      @keyframes hotspot-flash {
+        0%   { outline-color: rgba(239, 68, 68, 0); }
+        8%   { outline-color: rgba(239, 68, 68, 1); }
+        70%  { outline-color: rgba(239, 68, 68, 1); }
+        100% { outline-color: rgba(239, 68, 68, 0); }
+      }
+      body.flash-hotspots [data-hotspot] {
+        animation: hotspot-flash 1s ease-out forwards;
+      }
+    </style>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-low": "#f2f4f6",
+              "inverse-on-surface": "#eff1f3",
+              "on-primary-fixed-variant": "#723600",
+              "on-error": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "primary-fixed-dim": "#ffb786",
+              "error-container": "#ffdad6",
+              "primary-container": "#f57c00",
+              "on-tertiary-fixed-variant": "#004a77",
+              "surface-container": "#eceef0",
+              "tertiary-fixed": "#cee5ff",
+              "error": "#ba1a1a",
+              "surface-dim": "#d8dadc",
+              "surface-container-highest": "#e0e3e5",
+              "on-secondary-fixed": "#071e27",
+              "on-primary": "#ffffff",
+              "surface-container-high": "#e6e8ea",
+              "inverse-primary": "#ffb786",
+              "outline-variant": "#dec1af",
+              "secondary-container": "#cfe6f2",
+              "on-tertiary-container": "#00375a",
+              "on-tertiary": "#ffffff",
+              "on-primary-container": "#572800",
+              "secondary": "#4c616c",
+              "outline": "#8b7263",
+              "on-error-container": "#93000a",
+              "surface": "#f8f9fb",
+              "on-primary-fixed": "#311300",
+              "on-surface": "#191c1e",
+              "on-secondary-container": "#526772",
+              "tertiary-container": "#01a4ff",
+              "secondary-fixed": "#cfe6f2",
+              "on-secondary": "#ffffff",
+              "tertiary": "#00639c",
+              "primary": "#964900",
+              "tertiary-fixed-dim": "#98cbff",
+              "primary-fixed": "#ffdcc6",
+              "background": "#f8f9fb",
+              "on-secondary-fixed-variant": "#354a53",
+              "surface-bright": "#f8f9fb",
+              "surface-variant": "#e0e3e5",
+              "on-surface-variant": "#574235",
+              "on-background": "#191c1e",
+              "on-tertiary-fixed": "#001d33",
+              "surface-tint": "#964900",
+              "inverse-surface": "#2d3133",
+              "secondary-fixed-dim": "#b4cad6"
+            },
+            borderRadius: {
+              "DEFAULT": "0.125rem",
+              "lg": "0.25rem",
+              "xl": "0.5rem",
+              "full": "0.75rem"
+            },
+            spacing: {
+              "gutter": "16px",
+              "stack-md": "16px",
+              "margin-mobile": "16px",
+              "container-max-width": "1600px",
+              "stack-sm": "8px",
+              "unit": "4px",
+              "stack-lg": "24px",
+              "margin-desktop": "24px"
+            },
+            fontFamily: {
+              "headline-md": ["Geist"],
+              "headline-lg": ["Geist"],
+              "label-sm": ["JetBrains Mono"],
+              "label-md": ["JetBrains Mono"],
+              "headline-xl": ["Geist"],
+              "body-md": ["Geist"],
+              "body-sm": ["Geist"],
+              "body-lg": ["Geist"]
+            },
+            fontSize: {
+              "headline-md": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+              "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+              "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+              "label-md": ["13px", { "lineHeight": "16px", "fontWeight": "500" }],
+              "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+              "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+              "body-sm": ["12px", { "lineHeight": "18px", "fontWeight": "400" }],
+              "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+            }
+          },
+        },
+      };
+    </script>
+  </head>
+  <body class="bg-background text-on-surface font-body-md h-screen overflow-hidden">
+    <div id="root"></div>
+    <script>
+      (function () {
+        var timer;
+        document.addEventListener('click', function (e) {
+          if (e.target.closest('[data-hotspot]')) return;
+          var body = document.body;
+          body.classList.remove('flash-hotspots');
+          // Force reflow so the animation can restart on rapid clicks
+          void body.offsetWidth;
+          body.classList.add('flash-hotspots');
+          clearTimeout(timer);
+          timer = setTimeout(function () {
+            body.classList.remove('flash-hotspots');
+          }, 1000);
+        });
+      })();
+    </script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
